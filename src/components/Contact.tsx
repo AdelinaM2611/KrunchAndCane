@@ -27,7 +27,7 @@ export function Contact() {
             href="tel:+447405903381"
             className="rounded-full border-2 border-dashed border-leaf-green bg-cream px-8 py-4 text-lg font-semibold text-leaf-green transition-all hover:scale-105 hover:bg-leaf-green hover:text-white focus:outline-none focus:ring-2 focus:ring-leaf-green focus:ring-offset-2"
           >
-            +44 7700 900123
+            +44 7405 903381
           </a>
 
           {/* Instagram Icon */}
