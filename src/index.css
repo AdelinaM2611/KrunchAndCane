@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-gradient-to-b from-cream-light to-cream text-gray-800 antialiased;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+      "Helvetica Neue", Arial, sans-serif;
+  }
+
+  h1, h2, h3 {
+    @apply text-leaf-green font-bold;
+  }
+
+  h1 {
+    @apply text-5xl sm:text-6xl lg:text-7xl xl:text-8xl;
+  }
+
+  h2 {
+    @apply text-4xl sm:text-5xl lg:text-6xl xl:text-7xl;
+  }
+
+  h3 {
+    @apply text-2xl sm:text-3xl lg:text-4xl;
+  }
+
+  p {
+    @apply text-base sm:text-lg lg:text-xl;
+  }
+
+  a {
+    @apply text-leaf-green underline-offset-4 hover:text-leaf-deep hover:underline transition-colors;
+  }
+}
