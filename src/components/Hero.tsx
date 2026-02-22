@@ -27,12 +27,17 @@ export function Hero() {
 
   {/* FULL WIDTH HERO IMAGE */}
   <div className="mt-12 w-full">
-    <div className="h-[1150px] w-full overflow-hidden">
+    <div className="relative w-full overflow-hidden"> { /*/h-[1150px]*/}
+      <picture>
+        {/* Mobile (portrait) */}
+      <source media="(max-width: 768px)" srcSet="/images/hero-mobile.jpg" />
+      {/* Desktop (landscape) */}
       <img
         src="/images/hero.jpg"
         alt="Krunch & Cane Pastel"
-        className="h-full w-full object-cover object-[center_20%]"
+        className="w-full object-cover object-[center_20%] h-[70vh] sm:h-[80vh] lg:h-[1150px]"
       />
+      </picture>
     </div>
   </div>
 </section>
