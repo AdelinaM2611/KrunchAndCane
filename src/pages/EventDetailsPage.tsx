@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { API_BASE } from "../lib/api";
 
 type EventDetail = {
   id?: string;
@@ -13,7 +14,6 @@ type EventDetail = {
   [key: string]: unknown;
 };
 
-const API_BASE = import.meta.env.VITE_API_URL ?? (import.meta.env.DEV ? "http://localhost:4000" : "");
 const PLACEHOLDER_IMAGE = "https://placehold.co/1200x520?text=Event";
 
 function toGoogleCalDate(iso?: string): string {

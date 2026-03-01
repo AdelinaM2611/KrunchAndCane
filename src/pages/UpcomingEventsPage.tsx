@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { API_BASE } from "../lib/api";
 
 type EventItem = { id?: string; name?: string; title?: string; imageUrl?: string | null; startAt?: string; endAt?: string; [key: string]: unknown };
 
-const API_BASE = import.meta.env.VITE_API_URL ?? (import.meta.env.DEV ? "http://localhost:4000" : "");
 const PLACEHOLDER_IMAGE = "https://placehold.co/600x340?text=Event";
-const BANNER_PLACEHOLDER = "https://placehold.co/1200x400?text=Krunch+%26+Cane+Events";
+const BANNER_PLACEHOLDER = "/images/dough.jpg";
 
 function formatDate(iso?: string): string {
   if (!iso) return "";
@@ -60,26 +60,26 @@ export function UpcomingEventsPage() {
 
       {!loading && events.length > 0 && (
         <>
-          <p className="mb-4 text-sm text-gray-500">Only active upcoming events are shown. Cancelled events are not listed.</p>
-          <ul className="space-y-4">
+          <p className="mb-6 text-sm text-gray-500">Only active upcoming events are shown. Cancelled events are not listed.</p>
+          <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {events.map((event, index) => (
-              <li key={event.id ?? event.name ?? event.title ?? index}>
+              <li key={event.id ?? event.name ?? event.title ?? index} className="flex">
                 <Link
                   to={`/events/${event.id ?? index}`}
-                  className="block overflow-hidden rounded-xl border border-green-200 bg-white shadow-sm transition-shadow hover:shadow-lg"
+                  className="flex w-full flex-col overflow-hidden rounded-xl border border-green-200 bg-white shadow-sm transition-all duration-300 hover:shadow-xl hover:border-leaf-green/40 hover:-translate-y-0.5"
                 >
-                  <div className="h-48 w-full shrink-0 overflow-hidden bg-gray-100">
+                  <div className="aspect-[4/3] w-full shrink-0 overflow-hidden bg-gray-100">
                     <img
                       src={event.imageUrl ?? PLACEHOLDER_IMAGE}
                       alt=""
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.src = PLACEHOLDER_IMAGE;
                       }}
                     />
                   </div>
-                  <div className="p-4">
+                  <div className="flex flex-1 flex-col p-4">
                     <span className="text-lg font-medium text-gray-800">
                       {event.name ?? event.title ?? "Event"}
                     </span>

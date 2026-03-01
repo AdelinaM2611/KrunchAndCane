@@ -2,6 +2,17 @@ import app from "./app";
 import { config } from "./lib/config";
 import { logger } from "./lib/logger";
 
+const DEFAULT_JWT_SECRET = "change-me-in-production";
+
+function validateJwtSecret(): void {
+  if (config.nodeEnv !== "production") return;
+  if (!config.jwtSecret || config.jwtSecret === DEFAULT_JWT_SECRET) {
+    throw new Error(
+      "JWT_SECRET must be set to a secure value in production. Do not use the default."
+    );
+  }
+}
+
 function validateSendGridConfig(): void {
   const { apiKey, fromEmail } = config.sendgrid;
   const missing = [
@@ -18,6 +29,7 @@ function validateSendGridConfig(): void {
   logger.warn(msg);
 }
 
+validateJwtSecret();
 validateSendGridConfig();
 
 app.listen(config.port, () => {
