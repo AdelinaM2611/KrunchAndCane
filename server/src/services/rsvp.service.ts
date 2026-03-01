@@ -1,6 +1,8 @@
 import { rsvpRepo } from "../repositories/rsvp.repo";
 import { eventsRepo } from "../repositories/events.repo";
 import type { CreateRsvpInput } from "../schemas/rsvp.schemas";
+import { mailService } from "../integrations/mail.service";
+import { logger } from "../lib/logger";
 
 const DUPLICATE_RSVP_CODE = "P2002";
 
@@ -17,13 +19,38 @@ export const rsvpService = {
     if (event.status !== "ACTIVE") return null;
 
     try {
-      return await rsvpRepo.create({
+      const rsvp = await rsvpRepo.create({
         eventId: data.eventId,
         name: data.name,
         email: data.email,
         phone: data.phone ?? null,
         guests: data.guests ?? null,
       });
+
+      try {
+        await mailService.sendRsvpConfirmation({
+          email: data.email,
+          firstName: data.name.trim().split(/\s+/)[0] ?? data.name,
+          event: {
+            name: event.name,
+            location: event.location,
+            startAt: event.startAt,
+            endAt: event.endAt,
+          },
+        });
+        logger.info("SendGrid: sent RSVP confirmation email", {
+          eventId: data.eventId,
+          email: data.email,
+        });
+      } catch (e) {
+        logger.error("SendGrid RSVP confirmation failed", {
+          eventId: data.eventId,
+          email: data.email,
+          err: e instanceof Error ? e.message : String(e),
+        });
+      }
+
+      return rsvp;
     } catch (e: unknown) {
       const prismaError = e as { code?: string };
       if (prismaError?.code === DUPLICATE_RSVP_CODE) {

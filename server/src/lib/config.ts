@@ -7,4 +7,9 @@ export const config = {
   nodeEnv: process.env.NODE_ENV ?? "development",
   corsOrigin: process.env.CORS_ORIGIN ?? "http://localhost:5173",
   jwtSecret: process.env.JWT_SECRET ?? "change-me-in-production",
+  sendgrid: {
+    apiKey: process.env.SENDGRID_API_KEY ?? "",
+    fromEmail: process.env.SENDGRID_FROM_EMAIL ?? "",
+    fromName: process.env.SENDGRID_FROM_NAME ?? "Krunch & Cane",
+  },
 } as const;

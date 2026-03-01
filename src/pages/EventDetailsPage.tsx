@@ -35,6 +35,8 @@ export function EventDetailsPage() {
   const [rsvpName, setRsvpName] = useState("");
   const [rsvpEmail, setRsvpEmail] = useState("");
   const [rsvpPhone, setRsvpPhone] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState<{ type: "success" | "duplicate" | "error"; text: string } | null>(null);
 
   useEffect(() => {
     if (!eventId) {
@@ -56,6 +58,38 @@ export function EventDetailsPage() {
       })
       .finally(() => setLoading(false));
   }, [eventId]);
+
+  async function handleRsvpSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!eventId || submitting) return;
+    setSubmitMessage(null);
+    setSubmitting(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/events/${eventId}/rsvps`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: rsvpName.trim(),
+          email: rsvpEmail.trim(),
+          phone: rsvpPhone.trim() || undefined,
+        }),
+      });
+      if (res.status === 201) {
+        setSubmitMessage({ type: "success", text: "Thanks! Your RSVP has been recorded." });
+        setRsvpName("");
+        setRsvpEmail("");
+        setRsvpPhone("");
+      } else if (res.status === 409) {
+        setSubmitMessage({ type: "duplicate", text: "An RSVP with this email already exists for this event." });
+      } else {
+        setSubmitMessage({ type: "error", text: "Something went wrong. Please try again later." });
+      }
+    } catch {
+      setSubmitMessage({ type: "error", text: "Something went wrong. Please try again later." });
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   if (loading) {
     return (
@@ -131,7 +165,7 @@ export function EventDetailsPage() {
           <div className="mt-8 rounded-2xl border border-green-200 bg-white p-6 shadow-lg sm:p-8">
             <h2 className="mb-6 text-2xl font-bold text-leaf-green">RSVP</h2>
             <form
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={handleRsvpSubmit}
               className="grid max-w-md gap-5"
             >
               <div>
@@ -175,11 +209,25 @@ export function EventDetailsPage() {
                   placeholder="+44 …"
                 />
               </div>
+              {submitMessage && (
+                <p
+                  className={
+                    submitMessage.type === "success"
+                      ? "text-leaf-green font-medium"
+                      : submitMessage.type === "duplicate"
+                        ? "text-amber-700 font-medium"
+                        : "text-red-600 font-medium"
+                  }
+                >
+                  {submitMessage.text}
+                </p>
+              )}
               <button
                 type="submit"
-                className="rounded-full bg-gradient-to-r from-sugarcane-yellow to-orange-accent px-6 py-3 text-lg font-semibold text-gray-900 shadow-md transition-all hover:opacity-95"
+                disabled={submitting}
+                className="rounded-full bg-gradient-to-r from-sugarcane-yellow to-orange-accent px-6 py-3 text-lg font-semibold text-gray-900 shadow-md transition-all hover:opacity-95 disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                Submit RSVP
+                {submitting ? "Submitting…" : "Submit RSVP"}
               </button>
             </form>
           </div>
