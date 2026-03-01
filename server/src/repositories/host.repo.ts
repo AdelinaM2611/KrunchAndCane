@@ -1,25 +1,25 @@
-// Placeholder: use prisma or raw DB when ready (host/user entities)
-export type HostRecord = {
-  id: string;
-  email: string;
-  name?: string;
-  createdAt: Date;
-};
-
-const store: HostRecord[] = [];
+import { prisma } from "../lib/prisma";
 
 export const hostRepo = {
-  async findByEmail(email: string): Promise<HostRecord | null> {
-    return store.find((h) => h.email.toLowerCase() === email.toLowerCase()) ?? null;
+  async findByEmail(email: string) {
+    return prisma.hostUser.findUnique({
+      where: { email: email.toLowerCase() },
+    });
   },
 
-  async create(data: Omit<HostRecord, "id" | "createdAt">): Promise<HostRecord> {
-    const record: HostRecord = {
-      ...data,
-      id: `host_${Date.now()}`,
-      createdAt: new Date(),
-    };
-    store.push(record);
-    return record;
+  async findById(id: string) {
+    return prisma.hostUser.findUnique({
+      where: { id },
+    });
+  },
+
+  async create(data: { email: string; passwordHash: string; name?: string | null }) {
+    return prisma.hostUser.create({
+      data: {
+        email: data.email.toLowerCase(),
+        passwordHash: data.passwordHash,
+        name: data.name ?? null,
+      },
+    });
   },
 };

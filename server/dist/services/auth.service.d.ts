@@ -5,7 +5,7 @@ export declare const authService: {
         user: {
             id: string;
             email: string;
-            name: string | undefined;
+            name: string | null;
         };
     } | null>;
     register(input: RegisterInput): Promise<{
@@ -13,7 +13,7 @@ export declare const authService: {
         user: {
             id: string;
             email: string;
-            name: string | undefined;
+            name: string | null;
         };
     } | null>;
 };

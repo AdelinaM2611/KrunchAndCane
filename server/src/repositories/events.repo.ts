@@ -13,6 +13,20 @@ export const eventsRepo = {
     return prisma.event.findUnique({ where: { id } });
   },
 
+  async findByIdAndHostId(id: string, hostId: string) {
+    return prisma.event.findFirst({
+      where: { id, hostId },
+    });
+  },
+
+  async listByHostId(hostId: string) {
+    return prisma.event.findMany({
+      where: { hostId },
+      orderBy: { startAt: "asc" },
+      include: { _count: { select: { rsvps: true } } },
+    });
+  },
+
   async create(data: Prisma.EventCreateInput) {
     return prisma.event.create({ data });
   },

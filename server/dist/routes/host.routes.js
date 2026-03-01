@@ -39,5 +39,7 @@ const hostController = __importStar(require("../controllers/host.controller"));
 const auth_middleware_1 = require("../middleware/auth.middleware");
 const router = (0, express_1.Router)();
 router.get("/dashboard", auth_middleware_1.authMiddleware, hostController.getDashboard);
+router.get("/events", auth_middleware_1.authMiddleware, hostController.listHostEvents);
+router.get("/events/:eventId/rsvps", auth_middleware_1.authMiddleware, hostController.getEventRsvps);
 exports.hostRoutes = router;
 //# sourceMappingURL=host.routes.js.map

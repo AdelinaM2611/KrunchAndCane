@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -16,34 +16,59 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import { clearToken, getToken } from "../lib/auth";
 
-const NAV_LINKS = [
+const NAV_LINKS_PUBLIC = [
   { to: "/?section=about", label: "About Us" },
   { to: "/?section=contact", label: "Contact Us" },
   { to: "/events", label: "Upcoming Events" },
-  { to: "/login", label: "Login" },
 ] as const;
 
 export function Navbar() {
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const isHost = !!getToken();
 
   const handleDrawerToggle = () => setMobileOpen((o) => !o);
+  const handleLogout = () => {
+    clearToken();
+    setMobileOpen(false);
+    navigate("/login", { replace: true });
+  };
+
+  const navLinks = [
+    ...NAV_LINKS_PUBLIC,
+    ...(isHost
+      ? [
+          { to: "/host", label: "Dashboard" },
+          { to: "", label: "Log out", isLogout: true },
+        ]
+      : [{ to: "/login", label: "Login" }]),
+  ];
 
   const drawer = (
     <Box sx={{ width: 280, pt: 2, pb: 2 }} role="presentation">
       <List disablePadding>
-        {NAV_LINKS.map(({ to, label }) => (
-          <ListItem key={to} disablePadding>
-            <ListItemButton
-              component={Link}
-              to={to}
-              onClick={handleDrawerToggle}
-              sx={{ py: 1.5, color: "text.primary" }}
-            >
-              {label}
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {navLinks.map((item) =>
+          "isLogout" in item && item.isLogout ? (
+            <ListItem key="logout" disablePadding>
+              <ListItemButton onClick={handleLogout} sx={{ py: 1.5, color: "text.primary" }}>
+                Log out
+              </ListItemButton>
+            </ListItem>
+          ) : (
+            <ListItem key={item.to} disablePadding>
+              <ListItemButton
+                component={Link}
+                to={item.to}
+                onClick={handleDrawerToggle}
+                sx={{ py: 1.5, color: "text.primary" }}
+              >
+                {item.label}
+              </ListItemButton>
+            </ListItem>
+          )
+        )}
       </List>
       <Box sx={{ display: "flex", gap: 1, pl: 2, pt: 1 }}>
         <IconButton
@@ -87,11 +112,17 @@ export function Navbar() {
 
             {/* Desktop nav */}
             <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", gap: 1.5 }}>
-              {NAV_LINKS.map(({ to, label }) => (
-                <Button key={to} component={Link} to={to} color="inherit">
-                  {label}
-                </Button>
-              ))}
+              {navLinks.map((item) =>
+                "isLogout" in item && item.isLogout ? (
+                  <Button key="logout" onClick={handleLogout} color="inherit">
+                    Log out
+                  </Button>
+                ) : (
+                  <Button key={item.to} component={Link} to={item.to} color="inherit">
+                    {item.label}
+                  </Button>
+                )
+              )}
               <IconButton
                 href="https://instagram.com/krunchandcane"
                 target="_blank"

@@ -12,6 +12,18 @@ exports.eventsRepo = {
     async findById(id) {
         return prisma_1.prisma.event.findUnique({ where: { id } });
     },
+    async findByIdAndHostId(id, hostId) {
+        return prisma_1.prisma.event.findFirst({
+            where: { id, hostId },
+        });
+    },
+    async listByHostId(hostId) {
+        return prisma_1.prisma.event.findMany({
+            where: { hostId },
+            orderBy: { startAt: "asc" },
+            include: { _count: { select: { rsvps: true } } },
+        });
+    },
     async create(data) {
         return prisma_1.prisma.event.create({ data });
     },

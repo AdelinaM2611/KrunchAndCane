@@ -7,8 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model HostUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  events       Event[]
+}
+
 model Event {
   id          String   @id @default(cuid())
+  hostId      String?
+  host        HostUser? @relation(fields: [hostId], references: [id], onDelete: SetNull)
   name        String
   location    String
   startAt     DateTime

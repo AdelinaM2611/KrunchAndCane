@@ -1,13 +1,17 @@
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { config } from "../lib/config";
 import { hostRepo } from "../repositories/host.repo";
 import type { LoginInput, RegisterInput } from "../schemas/auth.schemas";
 
+const SALT_ROUNDS = 10;
+
 export const authService = {
   async login(input: LoginInput) {
     const host = await hostRepo.findByEmail(input.email);
-    // Placeholder: no real password check until DB/auth is wired
     if (!host) return null;
+    const ok = await bcrypt.compare(input.password, host.passwordHash);
+    if (!ok) return null;
     const token = jwt.sign(
       { sub: host.id },
       config.jwtSecret,
@@ -19,9 +23,11 @@ export const authService = {
   async register(input: RegisterInput) {
     const existing = await hostRepo.findByEmail(input.email);
     if (existing) return null;
+    const passwordHash = await bcrypt.hash(input.password, SALT_ROUNDS);
     const host = await hostRepo.create({
       email: input.email,
-      name: input.name,
+      passwordHash,
+      name: input.name ?? null,
     });
     const token = jwt.sign(
       { sub: host.id },

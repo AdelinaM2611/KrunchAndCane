@@ -1,8 +1,19 @@
-import { hostRepo } from "../repositories/host.repo";
+import { eventsRepo } from "../repositories/events.repo";
+import { rsvpRepo } from "../repositories/rsvp.repo";
 
 export const hostService = {
   async getDashboard(hostId: string) {
-    // Placeholder: aggregate events / RSVPs for host when DB is wired
-    return { hostId, events: [], rsvps: [] };
+    const events = await eventsRepo.listByHostId(hostId);
+    return { hostId, events, rsvps: [] };
+  },
+
+  async listHostEvents(hostId: string) {
+    return eventsRepo.listByHostId(hostId);
+  },
+
+  async getEventRsvps(hostId: string, eventId: string) {
+    const event = await eventsRepo.findByIdAndHostId(eventId, hostId);
+    if (!event) return null;
+    return rsvpRepo.findByEventId(eventId);
   },
 };

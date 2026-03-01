@@ -37,17 +37,23 @@ exports.eventsRoutes = void 0;
 const express_1 = require("express");
 const eventsController = __importStar(require("../controllers/events.controller"));
 const rsvpController = __importStar(require("../controllers/rsvp.controller"));
+const auth_middleware_1 = require("../middleware/auth.middleware");
 const validate_middleware_1 = require("../middleware/validate.middleware");
 const events_schemas_1 = require("../schemas/events.schemas");
 const rsvp_schemas_1 = require("../schemas/rsvp.schemas");
 const router = (0, express_1.Router)();
+// Public
 router.get("/", eventsController.getEvents);
-router.post("/", (0, validate_middleware_1.validateBody)(events_schemas_1.createEventSchema), eventsController.createEvent);
-router.post("/rsvps", (0, validate_middleware_1.validateBody)(rsvp_schemas_1.createRsvpSchema), rsvpController.createRsvp);
 router.get("/:eventId", eventsController.getEventById);
 router.post("/:eventId/rsvps", (0, validate_middleware_1.validateBody)(rsvp_schemas_1.createRsvpBodySchema), rsvpController.createRsvp);
 router.get("/:eventId/rsvps", rsvpController.listRsvps);
-router.patch("/:eventId", eventsController.updateEvent);
+// Protected (host)
+router.post("/", auth_middleware_1.authMiddleware, (0, validate_middleware_1.validateBody)(events_schemas_1.createEventSchema), eventsController.createEvent);
+router.put("/:eventId", auth_middleware_1.authMiddleware, (0, validate_middleware_1.validateBody)(events_schemas_1.updateEventSchema), eventsController.updateEvent);
+router.post("/:eventId/cancel", auth_middleware_1.authMiddleware, eventsController.cancelEvent);
+// Legacy (unchanged; still public)
+router.post("/rsvps", (0, validate_middleware_1.validateBody)(rsvp_schemas_1.createRsvpSchema), rsvpController.createRsvp);
+router.patch("/:eventId", auth_middleware_1.authMiddleware, (0, validate_middleware_1.validateBody)(events_schemas_1.updateEventSchema), eventsController.updateEvent);
 router.delete("/:eventId", eventsController.deleteEvent);
 exports.eventsRoutes = router;
 //# sourceMappingURL=events.routes.js.map

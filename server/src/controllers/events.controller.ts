@@ -26,7 +26,12 @@ export async function getEventById(req: Request, res: Response, next: NextFuncti
 
 export async function createEvent(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const event = await eventsService.create(req.body);
+    const hostId = req.user?.sub;
+    if (!hostId) {
+      res.status(401).json({ error: { code: "UNAUTHORIZED", message: "Not authenticated" } });
+      return;
+    }
+    const event = await eventsService.create(req.body, hostId);
     res.status(201).json(event);
   } catch (e) {
     next(e);
@@ -35,8 +40,13 @@ export async function createEvent(req: Request, res: Response, next: NextFunctio
 
 export async function updateEvent(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
+    const hostId = req.user?.sub;
+    if (!hostId) {
+      res.status(401).json({ error: { code: "UNAUTHORIZED", message: "Not authenticated" } });
+      return;
+    }
     const { eventId } = req.params;
-    const event = await eventsService.update(eventId, req.body);
+    const event = await eventsService.update(eventId, req.body, hostId);
     if (!event) {
       res.status(404).json({ error: { code: "NOT_FOUND", message: "Event not found" } });
       return;
@@ -56,6 +66,25 @@ export async function deleteEvent(req: Request, res: Response, next: NextFunctio
       return;
     }
     res.status(204).send();
+  } catch (e) {
+    next(e);
+  }
+}
+
+export async function cancelEvent(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const hostId = req.user?.sub;
+    if (!hostId) {
+      res.status(401).json({ error: { code: "UNAUTHORIZED", message: "Not authenticated" } });
+      return;
+    }
+    const { eventId } = req.params;
+    const event = await eventsService.cancel(eventId, hostId);
+    if (!event) {
+      res.status(404).json({ error: { code: "NOT_FOUND", message: "Event not found" } });
+      return;
+    }
+    res.json(event);
   } catch (e) {
     next(e);
   }

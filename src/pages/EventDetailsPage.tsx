@@ -9,11 +9,27 @@ type EventDetail = {
   endAt?: string;
   description?: string;
   imageUrl?: string | null;
+  status?: string;
   [key: string]: unknown;
 };
 
 const API_BASE = import.meta.env.VITE_API_URL ?? (import.meta.env.DEV ? "http://localhost:4000" : "");
 const PLACEHOLDER_IMAGE = "https://placehold.co/1200x520?text=Event";
+
+function toGoogleCalDate(iso?: string): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  return d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+}
+
+function googleCalendarUrl(event: EventDetail): string {
+  const name = encodeURIComponent(event.name ?? "Event");
+  const start = toGoogleCalDate(event.startAt);
+  const end = toGoogleCalDate(event.endAt);
+  const location = encodeURIComponent(event.location ?? "");
+  const details = encodeURIComponent(event.description ?? "");
+  return `https://www.google.com/calendar/render?action=TEMPLATE&text=${name}&dates=${start}/${end}&location=${location}&details=${details}`;
+}
 
 function formatDate(iso?: string): string {
   if (!iso) return "—";
@@ -110,6 +126,7 @@ export function EventDetailsPage() {
   const startTime = formatTime(event.startAt);
   const endTime = formatTime(event.endAt);
   const timeRange = startTime !== "—" && endTime !== "—" ? `${startTime} – ${endTime}` : startTime;
+  const isCancelled = event.status === "CANCELLED";
 
   return (
     <main className="px-4 py-12 sm:px-6 lg:px-8">
@@ -117,6 +134,13 @@ export function EventDetailsPage() {
         <h1 className="mb-6 text-4xl font-bold text-leaf-green sm:text-5xl">
           {event.name ?? "Event"}
         </h1>
+
+        {isCancelled && (
+          <div className="mb-6 rounded-2xl border-2 border-red-200 bg-red-50 p-4 text-center">
+            <p className="text-lg font-semibold text-red-800">This event has been cancelled.</p>
+            <p className="mt-1 text-red-700">RSVP is no longer available.</p>
+          </div>
+        )}
 
         <div className="mb-6 overflow-hidden rounded-2xl">
           <img
@@ -151,6 +175,7 @@ export function EventDetailsPage() {
           )}
         </div>
 
+        {!isCancelled && (
         <div className="mt-10">
           <button
             type="button"
@@ -160,8 +185,23 @@ export function EventDetailsPage() {
             To confirm that you will be attending please RSVP
           </button>
         </div>
+        )}
 
-        {showRsvpForm && (
+        {submitMessage?.type === "success" && (
+          <div className="mt-6 rounded-2xl border border-green-200 bg-green-50 p-4">
+            <p className="font-medium text-leaf-green">{submitMessage.text}</p>
+            <a
+              href={googleCalendarUrl(event)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-block text-sm font-medium text-leaf-green underline hover:no-underline"
+            >
+              Add to calendar
+            </a>
+          </div>
+        )}
+
+        {showRsvpForm && !isCancelled && (
           <div className="mt-8 rounded-2xl border border-green-200 bg-white p-6 shadow-lg sm:p-8">
             <h2 className="mb-6 text-2xl font-bold text-leaf-green">RSVP</h2>
             <form

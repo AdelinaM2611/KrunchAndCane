@@ -4,19 +4,19 @@ export declare const rsvpService: {
         id: string;
         name: string;
         createdAt: Date;
+        eventId: string;
         email: string;
         phone: string | null;
         guests: number | null;
-        eventId: string;
     }[] | null>;
     create(data: CreateRsvpInput): Promise<{
         id: string;
         name: string;
         createdAt: Date;
+        eventId: string;
         email: string;
         phone: string | null;
         guests: number | null;
-        eventId: string;
     } | null>;
 };
 //# sourceMappingURL=rsvp.service.d.ts.map

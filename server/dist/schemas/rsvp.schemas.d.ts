@@ -7,14 +7,14 @@ export declare const createRsvpSchema: z.ZodObject<{
     guests: z.ZodOptional<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
     name: string;
-    email: string;
     eventId: string;
+    email: string;
     phone?: string | undefined;
     guests?: number | undefined;
 }, {
     name: string;
-    email: string;
     eventId: string;
+    email: string;
     phone?: string | undefined;
     guests?: number | undefined;
 }>;

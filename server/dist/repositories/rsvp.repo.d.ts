@@ -3,10 +3,10 @@ export declare const rsvpRepo: {
         id: string;
         name: string;
         createdAt: Date;
+        eventId: string;
         email: string;
         phone: string | null;
         guests: number | null;
-        eventId: string;
     }[]>;
     create(data: {
         eventId: string;
@@ -18,10 +18,10 @@ export declare const rsvpRepo: {
         id: string;
         name: string;
         createdAt: Date;
+        eventId: string;
         email: string;
         phone: string | null;
         guests: number | null;
-        eventId: string;
     }>;
 };
 //# sourceMappingURL=rsvp.repo.d.ts.map
