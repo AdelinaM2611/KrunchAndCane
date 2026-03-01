@@ -1,13 +1,27 @@
-export type RsvpRecord = {
-    id: string;
-    eventId: string;
-    name: string;
-    email: string;
-    guests?: number;
-    createdAt: Date;
-};
 export declare const rsvpRepo: {
-    findByEventId(eventId: string): Promise<RsvpRecord[]>;
-    create(data: Omit<RsvpRecord, "id" | "createdAt">): Promise<RsvpRecord>;
+    findByEventId(eventId: string): Promise<{
+        id: string;
+        name: string;
+        createdAt: Date;
+        email: string;
+        phone: string | null;
+        guests: number | null;
+        eventId: string;
+    }[]>;
+    create(data: {
+        eventId: string;
+        name: string;
+        email: string;
+        phone?: string | null;
+        guests?: number | null;
+    }): Promise<{
+        id: string;
+        name: string;
+        createdAt: Date;
+        email: string;
+        phone: string | null;
+        guests: number | null;
+        eventId: string;
+    }>;
 };
 //# sourceMappingURL=rsvp.repo.d.ts.map

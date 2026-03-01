@@ -19,7 +19,9 @@ async function listRsvps(req, res, next) {
 }
 async function createRsvp(req, res, next) {
     try {
-        const rsvp = await rsvp_service_1.rsvpService.create(req.body);
+        const eventId = req.params.eventId ?? req.body.eventId;
+        const body = eventId ? { ...req.body, eventId } : req.body;
+        const rsvp = await rsvp_service_1.rsvpService.create(body);
         if (!rsvp) {
             res.status(404).json({ error: { code: "NOT_FOUND", message: "Event not found" } });
             return;
@@ -27,6 +29,13 @@ async function createRsvp(req, res, next) {
         res.status(201).json(rsvp);
     }
     catch (e) {
+        const err = e;
+        if (err?.code === "DUPLICATE_RSVP") {
+            res.status(409).json({
+                error: { code: "CONFLICT", message: err.message ?? "An RSVP with this email already exists for this event." },
+            });
+            return;
+        }
         next(e);
     }
 }

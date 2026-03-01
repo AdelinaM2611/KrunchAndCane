@@ -1,19 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.rsvpRepo = void 0;
-const store = [];
+const prisma_1 = require("../lib/prisma");
 exports.rsvpRepo = {
     async findByEventId(eventId) {
-        return store.filter((r) => r.eventId === eventId);
+        return prisma_1.prisma.rsvp.findMany({
+            where: { eventId },
+            orderBy: { createdAt: "desc" },
+        });
     },
     async create(data) {
-        const record = {
-            ...data,
-            id: `rsvp_${Date.now()}`,
-            createdAt: new Date(),
-        };
-        store.push(record);
-        return record;
+        return prisma_1.prisma.rsvp.create({
+            data: {
+                event: { connect: { id: data.eventId } },
+                name: data.name,
+                email: data.email,
+                phone: data.phone ?? undefined,
+                guests: data.guests ?? undefined,
+            },
+        });
     },
 };
 //# sourceMappingURL=rsvp.repo.js.map

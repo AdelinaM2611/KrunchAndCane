@@ -18,4 +18,18 @@ model Event {
   imageUrl    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  rsvps       Rsvp[]
+}
+
+model Rsvp {
+  id        String   @id @default(cuid())
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  name      String
+  email     String
+  phone     String?
+  guests    Int?
+  createdAt DateTime @default(now())
+
+  @@unique([eventId, email])
 }

@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { TopBar } from "./TopBar";
 import { Navbar } from "./Navbar";
 
 export function Layout() {
@@ -21,13 +20,14 @@ export function Layout() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-cream-light to-cream">
-      <TopBar />
       <Navbar />
-      <div className="mx-auto flex max-w-7xl flex-col">
+      <div className="flex flex-col">
         <Outlet />
-        <footer className="mt-16 border-t border-green-200 px-4 py-8 text-center text-sm text-gray-600 sm:px-6 lg:px-8">
-          <p>© {new Date().getFullYear()} Krunch &amp; Cane. All rights reserved.</p>
-        </footer>
+        <div className="mx-auto w-full max-w-7xl">
+          <footer className="mt-16 border-t border-green-200 px-4 py-8 text-center text-sm text-gray-600 sm:px-6 lg:px-8">
+            <p>© {new Date().getFullYear()} Krunch &amp; Cane. All rights reserved.</p>
+          </footer>
+        </div>
       </div>
     </div>
   );

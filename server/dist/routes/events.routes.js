@@ -45,8 +45,9 @@ router.get("/", eventsController.getEvents);
 router.post("/", (0, validate_middleware_1.validateBody)(events_schemas_1.createEventSchema), eventsController.createEvent);
 router.post("/rsvps", (0, validate_middleware_1.validateBody)(rsvp_schemas_1.createRsvpSchema), rsvpController.createRsvp);
 router.get("/:eventId", eventsController.getEventById);
+router.post("/:eventId/rsvps", (0, validate_middleware_1.validateBody)(rsvp_schemas_1.createRsvpBodySchema), rsvpController.createRsvp);
+router.get("/:eventId/rsvps", rsvpController.listRsvps);
 router.patch("/:eventId", eventsController.updateEvent);
 router.delete("/:eventId", eventsController.deleteEvent);
-router.get("/:eventId/rsvps", rsvpController.listRsvps);
 exports.eventsRoutes = router;
 //# sourceMappingURL=events.routes.js.map

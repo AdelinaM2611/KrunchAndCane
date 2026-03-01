@@ -1,27 +1,22 @@
-// Placeholder: use prisma or raw DB when ready
-export type RsvpRecord = {
-  id: string;
-  eventId: string;
-  name: string;
-  email: string;
-  guests?: number;
-  createdAt: Date;
-};
-
-const store: RsvpRecord[] = [];
+import { prisma } from "../lib/prisma";
 
 export const rsvpRepo = {
-  async findByEventId(eventId: string): Promise<RsvpRecord[]> {
-    return store.filter((r) => r.eventId === eventId);
+  async findByEventId(eventId: string) {
+    return prisma.rsvp.findMany({
+      where: { eventId },
+      orderBy: { createdAt: "desc" },
+    });
   },
 
-  async create(data: Omit<RsvpRecord, "id" | "createdAt">): Promise<RsvpRecord> {
-    const record: RsvpRecord = {
-      ...data,
-      id: `rsvp_${Date.now()}`,
-      createdAt: new Date(),
-    };
-    store.push(record);
-    return record;
+  async create(data: { eventId: string; name: string; email: string; phone?: string | null; guests?: number | null }) {
+    return prisma.rsvp.create({
+      data: {
+        event: { connect: { id: data.eventId } },
+        name: data.name,
+        email: data.email,
+        phone: data.phone ?? undefined,
+        guests: data.guests ?? undefined,
+      },
+    });
   },
 };
