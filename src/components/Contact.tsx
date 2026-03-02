@@ -1,3 +1,4 @@
+/** Contact section (id="contact") for scroll target; social and email links. */
 import InstagramIcon from "@mui/icons-material/Instagram";
 import {
   Box,

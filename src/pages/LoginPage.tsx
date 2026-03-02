@@ -1,3 +1,6 @@
+/**
+ * Host login page. POSTs credentials to /api/auth/login; on success stores JWT and redirects to /host.
+ */
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_BASE } from "../lib/api";
@@ -10,6 +13,7 @@ export function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  /** Submit email/password; on success save token and go to dashboard. */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);

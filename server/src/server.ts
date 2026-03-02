@@ -1,9 +1,13 @@
+/**
+ * Server entry: validates production config (JWT_SECRET, SendGrid), then starts the HTTP server.
+ */
 import app from "./app";
 import { config } from "./lib/config";
 import { logger } from "./lib/logger";
 
 const DEFAULT_JWT_SECRET = "change-me-in-production";
 
+/** In production, refuse to start if JWT_SECRET is missing or still the default. */
 function validateJwtSecret(): void {
   if (config.nodeEnv !== "production") return;
   if (!config.jwtSecret || config.jwtSecret === DEFAULT_JWT_SECRET) {
@@ -13,6 +17,7 @@ function validateJwtSecret(): void {
   }
 }
 
+/** In production require SendGrid; in dev only warn so emails are optional. */
 function validateSendGridConfig(): void {
   const { apiKey, fromEmail } = config.sendgrid;
   const missing = [

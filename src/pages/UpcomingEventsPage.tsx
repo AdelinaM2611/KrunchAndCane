@@ -1,3 +1,7 @@
+/**
+ * Public page listing active upcoming events in a grid. Fetches GET /api/events on mount.
+ * Each card links to the event detail page; cancelled events are not shown (API filters).
+ */
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { API_BASE } from "../lib/api";
@@ -22,6 +26,7 @@ export function UpcomingEventsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  /** Load active events from the public API once on mount. */
   useEffect(() => {
     setLoading(true);
     setError(null);

@@ -1,3 +1,6 @@
+/**
+ * Entry point: mounts the React app with MUI theme and global CSS.
+ */
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { CssBaseline, ThemeProvider } from "@mui/material";

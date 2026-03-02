@@ -1,3 +1,6 @@
+/**
+ * Server config from env: port, NODE_ENV, CORS_ORIGIN, JWT_SECRET, SendGrid keys. Loads .env via dotenv.
+ */
 import dotenv from "dotenv";
 
 dotenv.config();

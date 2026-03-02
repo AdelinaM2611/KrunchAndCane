@@ -1,3 +1,4 @@
+/** Landing hero: full-height section with CTA and link to events; scrolls to #about on button click. */
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { motion } from "framer-motion";

@@ -1,3 +1,6 @@
+/**
+ * Express app: CORS, JSON body parser, /api routes, global error handler.
+ */
 import express from "express";
 import cors from "cors";
 import { config } from "./lib/config";

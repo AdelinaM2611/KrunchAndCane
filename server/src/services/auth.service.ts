@@ -1,3 +1,6 @@
+/**
+ * Host auth: login (bcrypt compare + JWT), register (hash password, create host, JWT). JWT payload sub = host id.
+ */
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { config } from "../lib/config";
@@ -7,6 +10,7 @@ import type { LoginInput, RegisterInput } from "../schemas/auth.schemas";
 const SALT_ROUNDS = 10;
 
 export const authService = {
+  /** Validate email/password; return { token, user } or null. */
   async login(input: LoginInput) {
     const host = await hostRepo.findByEmail(input.email);
     if (!host) return null;
@@ -20,6 +24,7 @@ export const authService = {
     return { token, user: { id: host.id, email: host.email, name: host.name } };
   },
 
+  /** Create host (bcrypt hash); return { token, user } or null if email already exists. */
   async register(input: RegisterInput) {
     const existing = await hostRepo.findByEmail(input.email);
     if (existing) return null;

@@ -1,3 +1,7 @@
+/**
+ * App navbar: public links (About, Contact, Events), Login or Dashboard + Log out when host token exists.
+ * Mobile: drawer; desktop: buttons. Log out clears token and redirects to /login.
+ */
 import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
@@ -30,6 +34,7 @@ export function Navbar() {
   const isHost = !!getToken();
 
   const handleDrawerToggle = () => setMobileOpen((o) => !o);
+  /** Clear JWT and redirect to login. */
   const handleLogout = () => {
     clearToken();
     setMobileOpen(false);

@@ -1,3 +1,6 @@
+/**
+ * Zod schemas for RSVP create (eventId from URL or body); used by validateBody middleware.
+ */
 import { z } from "zod";
 
 export const createRsvpSchema = z.object({

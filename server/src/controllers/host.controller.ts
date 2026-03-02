@@ -1,6 +1,10 @@
+/**
+ * Host HTTP handlers: dashboard, list host events, list RSVPs for an event (all require JWT).
+ */
 import { Request, Response, NextFunction } from "express";
 import { hostService } from "../services/host.service";
 
+/** GET /api/host/dashboard. */
 export async function getDashboard(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const hostId = req.user?.sub;
@@ -15,6 +19,7 @@ export async function getDashboard(req: Request, res: Response, next: NextFuncti
   }
 }
 
+/** GET /api/host/events — events for this host (with RSVP counts). */
 export async function listHostEvents(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const hostId = req.user?.sub;
@@ -29,6 +34,7 @@ export async function listHostEvents(req: Request, res: Response, next: NextFunc
   }
 }
 
+/** GET /api/host/events/:eventId/rsvps — RSVPs for this event (only if event belongs to host). */
 export async function getEventRsvps(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const hostId = req.user?.sub;

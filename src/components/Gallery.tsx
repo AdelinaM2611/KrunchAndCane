@@ -1,3 +1,4 @@
+/** Gallery section on home: product/food images and short captions. */
 import { Box, Card, CardContent, Container, Stack, Typography } from "@mui/material";
 
 export function Gallery() {

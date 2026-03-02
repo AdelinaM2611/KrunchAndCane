@@ -1,3 +1,7 @@
+/**
+ * JWT auth middleware: reads Authorization Bearer token, verifies with config.jwtSecret, sets req.user (sub = host id).
+ * Responds 401 if missing or invalid.
+ */
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { config } from "../lib/config";

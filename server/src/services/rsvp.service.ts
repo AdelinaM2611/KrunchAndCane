@@ -1,3 +1,6 @@
+/**
+ * RSVP logic: list by event, create (only if event ACTIVE; send confirmation email; throw on duplicate email per event).
+ */
 import { rsvpRepo } from "../repositories/rsvp.repo";
 import { eventsRepo } from "../repositories/events.repo";
 import type { CreateRsvpInput } from "../schemas/rsvp.schemas";
@@ -13,6 +16,7 @@ export const rsvpService = {
     return rsvpRepo.findByEventId(eventId);
   },
 
+  /** Create RSVP if event exists and is ACTIVE; send confirmation email; throw DUPLICATE_RSVP (409) if email already RSVPed. */
   async create(data: CreateRsvpInput) {
     const event = await eventsRepo.findById(data.eventId);
     if (!event) return null;

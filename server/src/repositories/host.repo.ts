@@ -1,3 +1,6 @@
+/**
+ * Host (HostUser) database access: findByEmail (lowercased), findById, create.
+ */
 import { prisma } from "../lib/prisma";
 
 export const hostRepo = {

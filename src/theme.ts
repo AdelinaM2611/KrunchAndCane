@@ -1,6 +1,9 @@
+/**
+ * MUI theme and brand colors for Krunch & Cane (leaf green, cream, etc.).
+ */
 import { createTheme } from "@mui/material/styles";
 
-// Krunch & Cane color palette
+/** Krunch & Cane color palette. */
 export const colors = {
   leafGreen: "#0F8A3C",
   deepGreen: "#0B5D2A",

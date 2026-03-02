@@ -1,3 +1,6 @@
+/**
+ * /api/auth: login and register for hosts; return JWT on success.
+ */
 import { Router } from "express";
 import * as authController from "../controllers/auth.controller";
 import { validateBody } from "../middleware/validate.middleware";

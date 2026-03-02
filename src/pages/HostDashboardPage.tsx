@@ -1,3 +1,8 @@
+/**
+ * Host dashboard (/host): create/edit/cancel events, view RSVPs per event, link to public event page.
+ * Protected: redirects to /login if no token; 401 from API also clears token and redirects.
+ * Includes idle timeout (30 min), cancel confirmation modal, and Retry on errors.
+ */
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { apiFetch } from "../lib/api";
@@ -74,6 +79,7 @@ export function HostDashboardPage() {
   const [rsvpList, setRsvpList] = useState<RsvpItem[]>([]);
   const [rsvpListLoading, setRsvpListLoading] = useState(false);
 
+  /** Load host's events from GET /api/host/events; redirect to login on 401. */
   const fetchEvents = useCallback(async () => {
     const res = await apiFetch("/api/host/events");
     if (res.status === 401) {
@@ -90,6 +96,7 @@ export function HostDashboardPage() {
     setError(null);
   }, [navigate]);
 
+  /** On mount: require token, then load events; redirect to login if not authenticated. */
   useEffect(() => {
     if (!getToken()) {
       navigate("/login", { replace: true });
@@ -99,7 +106,7 @@ export function HostDashboardPage() {
     fetchEvents().finally(() => setLoading(false));
   }, [navigate, fetchEvents]);
 
-  // Idle timeout: after 30 min inactivity on dashboard, log out
+  /** Idle timeout: after 30 min without mousemove/keydown/click, clear token and redirect to login. */
   useEffect(() => {
     if (!getToken()) return;
     const IDLE_MS = 30 * 60 * 1000;
@@ -129,6 +136,7 @@ export function HostDashboardPage() {
     return () => clearTimeout(t);
   }, [successMessage]);
 
+  /** Create event via POST /api/events; then refresh list and show success. */
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
     setCreateSubmitting(true);
@@ -164,6 +172,7 @@ export function HostDashboardPage() {
     }
   }
 
+  /** Open edit modal and prefill form with event data. */
   function startEdit(event: HostEvent) {
     setEditingEvent(event);
     setEditForm({
@@ -176,6 +185,7 @@ export function HostDashboardPage() {
     });
   }
 
+  /** Update event via PUT /api/events/:id; then close modal and refresh list. */
   async function handleEdit(e: React.FormEvent) {
     e.preventDefault();
     if (!editingEvent) return;
@@ -212,6 +222,7 @@ export function HostDashboardPage() {
     }
   }
 
+  /** Cancel event via POST /api/events/:id/cancel; backend sends cancellation emails to RSVPs. */
   async function handleCancel(eventId: string) {
     setCancelId(eventId);
     setCancelConfirmId(null);
@@ -233,6 +244,7 @@ export function HostDashboardPage() {
     }
   }
 
+  /** Open RSVP list modal and fetch GET /api/host/events/:eventId/rsvps. */
   async function openRsvpModal(event: HostEvent) {
     setRsvpModalEvent(event);
     setRsvpListLoading(true);

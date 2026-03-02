@@ -1,3 +1,4 @@
+/** Simple JSON logger (info/warn/error) for server logs. */
 export const logger = {
   info: (msg: string, meta?: Record<string, unknown>) => {
     console.log(JSON.stringify({ level: "info", msg, ...meta }));

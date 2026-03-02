@@ -1,3 +1,6 @@
+/**
+ * Event database access: list active, find by id, by id+host (ownership), list by host, create/update/delete.
+ */
 import { prisma } from "../lib/prisma";
 import type { Prisma } from "@prisma/client";
 

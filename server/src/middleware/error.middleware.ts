@@ -1,3 +1,6 @@
+/**
+ * Global error handler: logs error, responds with JSON { error: { code, message } } and statusCode (default 500).
+ */
 import { Request, Response, NextFunction } from "express";
 import { logger } from "../lib/logger";
 

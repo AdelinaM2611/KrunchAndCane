@@ -1,6 +1,10 @@
+/**
+ * Auth HTTP handlers: login and register; return { token, user } on success.
+ */
 import { Request, Response, NextFunction } from "express";
 import { authService } from "../services/auth.service";
 
+/** POST /api/auth/login — validate credentials, return JWT. */
 export async function login(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const result = await authService.login(req.body);
@@ -14,6 +18,7 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
   }
 }
 
+/** POST /api/auth/register — create host, return JWT; 409 if email exists. */
 export async function register(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const result = await authService.register(req.body);

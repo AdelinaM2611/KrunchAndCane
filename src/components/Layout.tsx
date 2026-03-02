@@ -1,3 +1,6 @@
+/**
+ * Wraps all routes: navbar, main content (Outlet), footer. Handles scroll-to-section for ?section= or hash.
+ */
 import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { Navbar } from "./Navbar";
@@ -5,7 +8,7 @@ import { Navbar } from "./Navbar";
 export function Layout() {
   const location = useLocation();
 
-  // Scroll to hash when navigating to /#about or /#contact (e.g. from another page)
+  /** Scroll to hash when navigating to /#about or /#contact (e.g. from another page). */
   useEffect(() => {
     if (location.hash) {
       const id = location.hash.slice(1);

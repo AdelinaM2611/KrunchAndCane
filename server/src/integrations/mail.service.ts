@@ -1,3 +1,6 @@
+/**
+ * SendGrid integration: RSVP confirmation email and event cancellation email. Skips sending if not configured.
+ */
 import sgMail from "@sendgrid/mail";
 import { config } from "../lib/config";
 

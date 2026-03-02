@@ -1,3 +1,7 @@
+/**
+ * Public event detail page (/events/:eventId). Loads one event; if ACTIVE, shows RSVP form.
+ * On success: shows confirmation and "Add to calendar" (Google Calendar URL). If cancelled, shows message and hides RSVP.
+ */
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { API_BASE } from "../lib/api";
@@ -16,12 +20,14 @@ type EventDetail = {
 
 const PLACEHOLDER_IMAGE = "https://placehold.co/1200x520?text=Event";
 
+/** Format ISO date for Google Calendar URL (YYYYMMDDTHHmmssZ). */
 function toGoogleCalDate(iso?: string): string {
   if (!iso) return "";
   const d = new Date(iso);
   return d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
 }
 
+/** Build "Add to calendar" link for Google Calendar with event details. */
 function googleCalendarUrl(event: EventDetail): string {
   const name = encodeURIComponent(event.name ?? "Event");
   const start = toGoogleCalDate(event.startAt);
@@ -54,6 +60,7 @@ export function EventDetailsPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState<{ type: "success" | "duplicate" | "error"; text: string } | null>(null);
 
+  /** Load event by ID from public API; includes status so we can show cancelled state. */
   useEffect(() => {
     if (!eventId) {
       setLoading(false);
@@ -75,6 +82,7 @@ export function EventDetailsPage() {
       .finally(() => setLoading(false));
   }, [eventId]);
 
+  /** POST RSVP; 201 = success (show message + Add to calendar), 409 = duplicate email. */
   async function handleRsvpSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!eventId || submitting) return;

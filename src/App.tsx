@@ -1,3 +1,6 @@
+/**
+ * Root app: defines routes and wraps all pages in a shared Layout (navbar + footer).
+ */
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { HomePage } from "./pages/HomePage";

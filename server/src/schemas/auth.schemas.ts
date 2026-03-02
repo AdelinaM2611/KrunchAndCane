@@ -1,3 +1,6 @@
+/**
+ * Zod schemas for login and register (email, password, name); used by validateBody middleware.
+ */
 import { z } from "zod";
 
 export const loginSchema = z.object({

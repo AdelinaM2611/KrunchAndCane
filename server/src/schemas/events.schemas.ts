@@ -1,3 +1,6 @@
+/**
+ * Zod schemas for event create/update and eventId param; used by validateBody middleware.
+ */
 import { z } from "zod";
 
 export const createEventSchema = z.object({

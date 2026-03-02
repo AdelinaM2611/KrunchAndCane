@@ -1,3 +1,6 @@
+/**
+ * Event business logic: list public/active, get by id, create/update/cancel (with ownership check), send cancellation emails.
+ */
 import { eventsRepo } from "../repositories/events.repo";
 import { rsvpRepo } from "../repositories/rsvp.repo";
 import type { CreateEventInput, UpdateEventInput } from "../schemas/events.schemas";
@@ -21,6 +24,7 @@ export const eventsService = {
     return eventsRepo.listByHostId(hostId);
   },
 
+  /** Create event for host; default start/end if not provided. */
   async create(data: CreateEventInput, hostId: string) {
     const startAt = data.startAt ? new Date(data.startAt) : new Date();
     const endAt = data.endAt ? new Date(data.endAt) : new Date(Date.now() + 60 * 60 * 1000);
@@ -35,6 +39,7 @@ export const eventsService = {
     });
   },
 
+  /** Update only if event belongs to host; partial updates supported. */
   async update(id: string, data: UpdateEventInput, hostId: string) {
     const event = await eventsRepo.findByIdAndHostId(id, hostId);
     if (!event) return null;
@@ -49,6 +54,7 @@ export const eventsService = {
     return eventsRepo.update(id, update);
   },
 
+  /** Set status CANCELLED; send cancellation email to each RSVP (best-effort, log on failure). */
   async cancel(id: string, hostId: string) {
     const event = await eventsRepo.findByIdAndHostId(id, hostId);
     if (!event) return null;

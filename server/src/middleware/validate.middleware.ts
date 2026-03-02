@@ -1,3 +1,6 @@
+/**
+ * Request validation: validateBody parses req.body with Zod; validateQuery parses req.query. Respond 400 on error.
+ */
 import { Request, Response, NextFunction } from "express";
 import { ZodSchema, ZodError } from "zod";
 

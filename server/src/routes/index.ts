@@ -1,3 +1,6 @@
+/**
+ * Mounts all API routes under /api: events, auth, host. Health check at GET /api/health.
+ */
 import { Router } from "express";
 import { eventsRoutes } from "./events.routes";
 import { authRoutes } from "./auth.routes";

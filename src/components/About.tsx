@@ -1,3 +1,4 @@
+/** About section (id="about") for scroll target from nav; "How it started" and brand story. */
 import { Box, Card, CardContent, Container, Stack, Typography } from "@mui/material";
 
 export function About() {

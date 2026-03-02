@@ -1,3 +1,4 @@
+/** Static menu highlights (pastels, juice, etc.) for marketing. */
 type MenuItem = { name: string; description: string; price: string };
 
 const MENU: MenuItem[] = [

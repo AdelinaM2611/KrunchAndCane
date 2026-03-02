@@ -1,3 +1,6 @@
+/**
+ * RSVP database access: list by event (newest first), create (unique eventId+email enforced by schema).
+ */
 import { prisma } from "../lib/prisma";
 
 export const rsvpRepo = {

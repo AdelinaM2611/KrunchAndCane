@@ -1,6 +1,10 @@
+/**
+ * Event HTTP handlers: list public, get by id, create/update/cancel (host), delete.
+ */
 import { Request, Response, NextFunction } from "express";
 import { eventsService } from "../services/events.service";
 
+/** GET /api/events — list active events (public). */
 export async function getEvents(_req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const events = await eventsService.listPublicEvents();
@@ -10,6 +14,7 @@ export async function getEvents(_req: Request, res: Response, next: NextFunction
   }
 }
 
+/** GET /api/events/:eventId — one event by id (public). */
 export async function getEventById(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { eventId } = req.params;
@@ -24,6 +29,7 @@ export async function getEventById(req: Request, res: Response, next: NextFuncti
   }
 }
 
+/** POST /api/events — create event (host; req.user from auth middleware). */
 export async function createEvent(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const hostId = req.user?.sub;
@@ -38,6 +44,7 @@ export async function createEvent(req: Request, res: Response, next: NextFunctio
   }
 }
 
+/** PUT /api/events/:eventId — update event (host only; service checks ownership). */
 export async function updateEvent(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const hostId = req.user?.sub;
@@ -57,6 +64,7 @@ export async function updateEvent(req: Request, res: Response, next: NextFunctio
   }
 }
 
+/** DELETE /api/events/:eventId — remove event (legacy). */
 export async function deleteEvent(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { eventId } = req.params;
@@ -71,6 +79,7 @@ export async function deleteEvent(req: Request, res: Response, next: NextFunctio
   }
 }
 
+/** POST /api/events/:eventId/cancel — set status CANCELLED and send emails to RSVPs (host only). */
 export async function cancelEvent(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const hostId = req.user?.sub;

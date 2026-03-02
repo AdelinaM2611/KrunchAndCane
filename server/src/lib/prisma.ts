@@ -1,3 +1,6 @@
+/**
+ * Single Prisma client instance; reused in dev to avoid too many connections (hot reload).
+ */
 import { PrismaClient } from "@prisma/client";
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient | undefined };
