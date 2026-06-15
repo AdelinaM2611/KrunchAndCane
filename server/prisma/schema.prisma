@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model HostUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  events       Event[]
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  hostId      String?
+  host        HostUser? @relation(fields: [hostId], references: [id], onDelete: SetNull)
+  name        String
+  location    String
+  startAt     DateTime
+  endAt       DateTime
+  description String
+  status      String   @default("ACTIVE")
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  rsvps       Rsvp[]
+}
+
+model Rsvp {
+  id        String   @id @default(cuid())
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  name      String
+  email     String
+  phone     String?
+  guests    Int?
+  createdAt DateTime @default(now())
+
+  @@unique([eventId, email])
+}

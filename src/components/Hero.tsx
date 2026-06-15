@@ -1,44 +1,126 @@
+/** Landing hero: CTAs for Pre-order (SumUp), Find us, and scroll to About. */
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import { Box, Button, Container, Stack, Typography } from "@mui/material";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { SUMUP_STORE_URL } from "../lib/constants";
+
 export function Hero() {
+  const scrollToAbout = () => {
+    const aboutSection = document.getElementById("about");
+    if (!aboutSection) return;
+
+    const offset = 100;
+    const top = aboutSection.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top, behavior: "smooth" });
+  };
+
   return (
-    <section className="py-12 sm:py-16 lg:py-20">
-  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    
-    {/* Top: Text + Logo */}
-    <div className="grid gap-8 lg:grid-cols-2 lg:items-center lg:gap-12">
-      
-      <div>
-        <img
-          src="/images/logo3.png"
-          alt="Krunch & Cane"
-          className="w-full max-w-2xl h-auto"
-        />
-
-        <p className="mt-4 text-xl text-gray-700 sm:text-2xl">
-          Freshly fried Brazilian pastéis & pressed sugarcane juice
-        </p>
-      </div>
-
-      <div className="flex justify-center">
-        {/* You can keep logo here or remove duplicate */}
-      </div>
-
-    </div>
-  </div>
-
-  {/* FULL WIDTH HERO IMAGE */}
-  <div className="mt-12 w-full">
-    <div className="relative w-full overflow-hidden"> { /*/h-[1150px]*/}
-      <picture>
-        {/* Mobile (portrait) */}
-      <source media="(max-width: 768px)" srcSet="/images/hero-mobile.jpg" />
-      {/* Desktop (landscape) */}
-      <img
-        src="/images/hero.jpg"
-        alt="Krunch & Cane Pastel"
-        className="w-full object-cover object-[center_20%] h-[70vh] sm:h-[80vh] lg:h-[1150px]"
+    <Box
+      component="section"
+      sx={{
+        position: "relative",
+        height: "calc(100vh - 72px)",
+        minHeight: 0,
+        display: "flex",
+        flexDirection: "column",
+        backgroundImage: {
+          xs: "url('/images/hero-mobile.jpg')",
+          md: "url('/images/hero.jpg')",
+        },
+        backgroundSize: "cover",
+        backgroundPosition: { xs: "center", md: "center 35%" },
+        overflow: "hidden",
+      }}
+    >
+      <Box
+        sx={{
+          position: "absolute",
+          inset: 0,
+          backgroundColor: "rgba(0, 0, 0, 0.45)",
+        }}
       />
-      </picture>
-    </div>
-  </div>
-</section>
-  ) }
+
+      {/* Scrollable content area so CTA + arrow always visible below fold */}
+      <Box
+        sx={{
+          position: "relative",
+          zIndex: 1,
+          flex: "1 1 auto",
+          minHeight: 0,
+          display: "flex",
+          alignItems: "center",
+          overflowY: "auto",
+        }}
+      >
+        <Container sx={{ py: { xs: 3, md: 4 } }}>
+          <Stack spacing={2.5} sx={{ maxWidth: 700 }}>
+            <Box
+              component="img"
+              src="/images/logo3.png"
+              alt="Krunch & Cane logo"
+              sx={{
+                width: "100%",
+                maxWidth: { xs: 240, sm: 360, md: 460 },
+                height: "auto",
+              }}
+            />
+
+            <Typography variant="h5" sx={{ color: "rgba(255,255,255,0.94)", lineHeight: 1.4, fontSize: { xs: "1.1rem", sm: "1.25rem" } }}>
+              Authentic Brazilian street-food energy, crafted for UK markets, festivals, and private
+              events.
+            </Typography>
+
+            <Typography variant="body1" sx={{ color: "rgba(255,255,255,0.85)", maxWidth: 620, fontSize: { xs: "0.9rem", sm: "1rem" } }}>
+              We serve hand-made pastéis and freshly pressed sugarcane juice with bold flavour,
+              quick service, and a standout setup that keeps your guests coming back for more.
+            </Typography>
+
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <Button
+                href={SUMUP_STORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="contained"
+                size="large"
+                color="primary"
+              >
+                Pre-order
+              </Button>
+              <Button component={Link} to="/find-us" variant="contained" size="large" color="primary">
+                Find us
+              </Button>
+              <Button onClick={scrollToAbout} variant="outlined" size="large" color="secondary">
+                Learn Our Story
+              </Button>
+            </Stack>
+          </Stack>
+        </Container>
+      </Box>
+
+      {/* Arrow fixed at bottom of hero so always visible on load */}
+      <Box
+        component={motion.button}
+        onClick={scrollToAbout}
+        aria-label="Scroll to next section"
+        animate={{ y: [0, 10, 0] }}
+        transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+        sx={{
+          flexShrink: 0,
+          position: "relative",
+          zIndex: 2,
+          border: "none",
+          background: "transparent",
+          color: "white",
+          display: "grid",
+          placeItems: "center",
+          cursor: "pointer",
+          opacity: 0.92,
+          py: 1.5,
+        }}
+      >
+        <KeyboardArrowDownRoundedIcon sx={{ fontSize: 44 }} />
+      </Box>
+    </Box>
+  );
+}

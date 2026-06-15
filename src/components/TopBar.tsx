@@ -1,3 +1,4 @@
+/** Optional top bar (e.g. social links); used where needed above main content. */
 export function TopBar() {
   return (
     <div className="bg-leaf-green px-4 py-3 sm:px-6 lg:px-8">

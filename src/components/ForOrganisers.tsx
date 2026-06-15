@@ -1,3 +1,4 @@
+/** "For Market Organisers" section: credentials and contact CTA. */
 export function ForOrganisers() {
   return (
     <section className="py-8 sm:py-12">
