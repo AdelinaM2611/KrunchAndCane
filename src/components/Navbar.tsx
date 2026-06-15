@@ -1,5 +1,5 @@
 /**
- * Public navbar: About, Contact, Pre-order (SumUp), Find us. Mobile drawer + desktop buttons.
+ * Public navbar: About, Contact, Pre-order, Find us. Mobile drawer + desktop buttons.
  */
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
@@ -19,7 +19,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { SUMUP_STORE_URL, TIKTOK_URL } from "../lib/constants";
+import { TIKTOK_URL } from "../lib/constants";
 import { TikTokIcon } from "./icons/TikTokIcon";
 
 type NavLinkItem =
@@ -29,7 +29,7 @@ type NavLinkItem =
 const NAV_LINKS: NavLinkItem[] = [
   { type: "internal", to: "/?section=about", label: "About Us" },
   { type: "internal", to: "/?section=contact", label: "Contact Us" },
-  { type: "external", href: SUMUP_STORE_URL, label: "Pre-order" },
+  { type: "internal", to: "/pre-order", label: "Pre-order" },
   { type: "internal", to: "/find-us", label: "Find us" },
 ];
 
