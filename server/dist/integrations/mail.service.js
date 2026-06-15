@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.mailService = void 0;
 exports.sendRsvpConfirmation = sendRsvpConfirmation;
 exports.sendEventCancellation = sendEventCancellation;
+
 const mail_1 = __importDefault(require("@sendgrid/mail"));
 const config_1 = require("../lib/config");
 if (config_1.config.sendgrid.apiKey) {

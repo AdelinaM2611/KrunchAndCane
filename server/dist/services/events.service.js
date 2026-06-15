@@ -5,6 +5,7 @@ const events_repo_1 = require("../repositories/events.repo");
 const rsvp_repo_1 = require("../repositories/rsvp.repo");
 const mail_service_1 = require("../integrations/mail.service");
 const logger_1 = require("../lib/logger");
+
 exports.eventsService = {
     async listPublicEvents() {
         return events_repo_1.eventsRepo.listActiveEvents();
