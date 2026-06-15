@@ -1,8 +1,9 @@
-/** Landing hero: full-height section with CTA and link to events; scrolls to #about on button click. */
+/** Landing hero: CTAs for Pre-order (SumUp), Find us, and scroll to About. */
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { SUMUP_STORE_URL } from "../lib/constants";
 
 export function Hero() {
   const scrollToAbout = () => {
@@ -76,8 +77,18 @@ export function Hero() {
             </Typography>
 
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              <Button component={Link} to="/events" variant="contained" size="large" color="primary">
-                See Upcoming Events
+              <Button
+                href={SUMUP_STORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="contained"
+                size="large"
+                color="primary"
+              >
+                Pre-order
+              </Button>
+              <Button component={Link} to="/find-us" variant="contained" size="large" color="primary">
+                Find us
               </Button>
               <Button onClick={scrollToAbout} variant="outlined" size="large" color="secondary">
                 Learn Our Story

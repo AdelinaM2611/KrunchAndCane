@@ -1,10 +1,10 @@
 /**
- * Host dashboard (/host): create/edit/cancel events, view RSVPs per event, link to public event page.
+ * Host dashboard (/host): create/edit/cancel events, view RSVPs per event.
  * Protected: redirects to /login if no token; 401 from API also clears token and redirects.
  * Includes idle timeout (30 min), cancel confirmation modal, and Retry on errors.
  */
 import { useCallback, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { apiFetch } from "../lib/api";
 import { clearToken, getToken } from "../lib/auth";
 
@@ -393,16 +393,6 @@ export function HostDashboardPage() {
                         <span className="font-medium text-leaf-green">RSVPs:</span>{" "}
                         {event._count?.rsvps ?? 0}
                       </p>
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        <Link
-                          to={`/events/${event.id}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm font-medium text-leaf-green underline hover:no-underline"
-                        >
-                          View event page
-                        </Link>
-                      </div>
                     </div>
                     <div className="flex flex-wrap gap-2">
                       <button

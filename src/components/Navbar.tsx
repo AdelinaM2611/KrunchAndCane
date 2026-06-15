@@ -1,9 +1,8 @@
 /**
- * App navbar: public links (About, Contact, Events), Login or Dashboard + Log out when host token exists.
- * Mobile: drawer; desktop: buttons. Log out clears token and redirects to /login.
+ * Public navbar: About, Contact, Pre-order (SumUp), Find us. Mobile drawer + desktop buttons.
  */
 import { useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -20,45 +19,40 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { clearToken, getToken } from "../lib/auth";
+import { SUMUP_STORE_URL, TIKTOK_URL } from "../lib/constants";
+import { TikTokIcon } from "./icons/TikTokIcon";
 
-const NAV_LINKS_PUBLIC = [
-  { to: "/?section=about", label: "About Us" },
-  { to: "/?section=contact", label: "Contact Us" },
-  { to: "/events", label: "Upcoming Events" },
-] as const;
+type NavLinkItem =
+  | { type: "internal"; to: string; label: string }
+  | { type: "external"; href: string; label: string };
+
+const NAV_LINKS: NavLinkItem[] = [
+  { type: "internal", to: "/?section=about", label: "About Us" },
+  { type: "internal", to: "/?section=contact", label: "Contact Us" },
+  { type: "external", href: SUMUP_STORE_URL, label: "Pre-order" },
+  { type: "internal", to: "/find-us", label: "Find us" },
+];
 
 export function Navbar() {
-  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const isHost = !!getToken();
 
   const handleDrawerToggle = () => setMobileOpen((o) => !o);
-  /** Clear JWT and redirect to login. */
-  const handleLogout = () => {
-    clearToken();
-    setMobileOpen(false);
-    navigate("/login", { replace: true });
-  };
-
-  const navLinks = [
-    ...NAV_LINKS_PUBLIC,
-    ...(isHost
-      ? [
-          { to: "/host", label: "Dashboard" },
-          { to: "", label: "Log out", isLogout: true },
-        ]
-      : [{ to: "/login", label: "Login" }]),
-  ];
 
   const drawer = (
     <Box sx={{ width: 280, pt: 2, pb: 2 }} role="presentation">
       <List disablePadding>
-        {navLinks.map((item) =>
-          "isLogout" in item && item.isLogout ? (
-            <ListItem key="logout" disablePadding>
-              <ListItemButton onClick={handleLogout} sx={{ py: 1.5, color: "text.primary" }}>
-                Log out
+        {NAV_LINKS.map((item) =>
+          item.type === "external" ? (
+            <ListItem key={item.label} disablePadding>
+              <ListItemButton
+                component="a"
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={handleDrawerToggle}
+                sx={{ py: 1.5, color: "text.primary" }}
+              >
+                {item.label}
               </ListItemButton>
             </ListItem>
           ) : (
@@ -84,6 +78,15 @@ export function Navbar() {
           color="primary"
         >
           <InstagramIcon />
+        </IconButton>
+        <IconButton
+          href={TIKTOK_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="TikTok"
+          color="primary"
+        >
+          <TikTokIcon />
         </IconButton>
         <IconButton href="mailto:Info@krunchandcane.co.uk" aria-label="Email" color="primary">
           <EmailOutlinedIcon />
@@ -115,12 +118,17 @@ export function Navbar() {
               Krunch &amp; Cane
             </Typography>
 
-            {/* Desktop nav */}
             <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", gap: 1.5 }}>
-              {navLinks.map((item) =>
-                "isLogout" in item && item.isLogout ? (
-                  <Button key="logout" onClick={handleLogout} color="inherit">
-                    Log out
+              {NAV_LINKS.map((item) =>
+                item.type === "external" ? (
+                  <Button
+                    key={item.label}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    color="inherit"
+                  >
+                    {item.label}
                   </Button>
                 ) : (
                   <Button key={item.to} component={Link} to={item.to} color="inherit">
@@ -139,6 +147,16 @@ export function Navbar() {
                 <InstagramIcon fontSize="small" />
               </IconButton>
               <IconButton
+                href={TIKTOK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TikTok"
+                color="primary"
+                size="small"
+              >
+                <TikTokIcon fontSize="small" />
+              </IconButton>
+              <IconButton
                 href="mailto:Info@krunchandcane.co.uk"
                 aria-label="Email"
                 color="primary"
@@ -148,7 +166,6 @@ export function Navbar() {
               </IconButton>
             </Box>
 
-            {/* Mobile hamburger */}
             <IconButton
               color="inherit"
               aria-label="Open menu"

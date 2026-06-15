@@ -2,15 +2,13 @@
 
 ## What's in this project
 
-This RESVP-feature repo includes the features I implemented:
+This repo includes a public marketing site plus a Node/Express API (host auth and event management remain in `server/` for internal use).
 
-- **Upcoming Events** — Public page listing active events (with date/time on cards) and a link to each event’s detail page.
-- **Event detail & RSVP** — Public event page with RSVP form; duplicate email per event is blocked; confirmation email (SendGrid); cancelled events show a message and RSVP is disabled; “Add to calendar” link after a successful RSVP.
-- **Host login** — Login/register for event organisers; JWT stored in the browser; protected routes for host-only actions.
-- **Host dashboard** — Create, edit, and cancel events; view RSVPs per event; confirm before cancelling (with cancellation emails to RSVPs); link to the public event page; logout; idle timeout; retry on errors.
-- **Backend** — Node/Express API, Prisma (PostgreSQL), auth middleware, request validation (Zod), and SendGrid for RSVP and cancellation emails.
+- **Find us** — Static page at `/find-us` with market location (Backyard Market, 146 Brick Lane, London E1 6QL) and a pastel image.
+- **Pre-order** — Navbar and hero link to the SumUp store (opens in a new tab).
+- **Backend** — Node/Express API, Prisma (PostgreSQL), auth middleware, request validation (Zod), and SendGrid for emails (used by host/event flows in the API).
 
-Marketing site and host admin for events and RSVPs. Built with React (Vite, Tailwind, MUI), Node/Express, Prisma (PostgreSQL), and SendGrid for emails.
+Marketing site built with React (Vite, Tailwind, MUI). Backend: Node/Express, Prisma (PostgreSQL), SendGrid.
 
 ## Run locally
 

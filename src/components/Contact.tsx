@@ -8,6 +8,8 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { TIKTOK_URL } from "../lib/constants";
+import { TikTokIcon } from "./icons/TikTokIcon";
 
 export function Contact() {
   return (
@@ -64,6 +66,22 @@ export function Contact() {
             }}
           >
             <InstagramIcon />
+          </IconButton>
+
+          <IconButton
+            href={TIKTOK_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            color="secondary"
+            aria-label="TikTok"
+            sx={{
+              border: "1px solid",
+              borderColor: "secondary.main",
+              width: 52,
+              height: 52,
+            }}
+          >
+            <TikTokIcon />
           </IconButton>
         </Stack>
       </Container>
