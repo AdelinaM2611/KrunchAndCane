@@ -5,7 +5,7 @@
 This repo includes a public marketing site plus a Node/Express API (host auth and event management remain in `server/` for internal use).
 
 - **Find us** — Static page at `/find-us` with market location (Backyard Market, 146 Brick Lane, London E1 6QL) and a pastel image.
-- **Pre-order** — Navbar and hero link to the SumUp store (opens in a new tab).
+- **Pre-order** — Branded route at `/pre-order` redirects to the SumUp store (navbar and hero link there; Vercel also redirects in production).
 - **Backend** — Node/Express API, Prisma (PostgreSQL), auth middleware, request validation (Zod), and SendGrid for emails (used by host/event flows in the API).
 
 Marketing site built with React (Vite, Tailwind, MUI). Backend: Node/Express, Prisma (PostgreSQL), SendGrid.

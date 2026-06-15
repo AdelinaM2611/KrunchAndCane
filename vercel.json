@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/pre-order",
+      "destination": "https://krunch-cane-ltd.sumupstore.com/products",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
